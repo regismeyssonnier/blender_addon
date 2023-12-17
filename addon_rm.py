@@ -28,12 +28,23 @@ class MyOpAddPoint(bpy.types.Operator):
     
     
     def execute(self, context):
+            
         bpy.ops.mesh.primitive_plane_add(enter_editmode=True, align='WORLD', location=(0, 0, 0), scale=(1, 1, 1))
         bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='VERT')
         bpy.ops.mesh.select_all(action='SELECT')
         bpy.ops.mesh.merge(type='COLLAPSE')
         bpy.ops.object.editmode_toggle()
+      
 
+        return{'FINISHED'}
+    
+class MyOpSetOrigGeo(bpy.types.Operator):
+    bl_idname='myops.set_orig_to_geo'
+    bl_label = 'Set Origin to Geometry'
+    
+    
+    def execute(self, context):
+        bpy.ops.object.origin_set(type='ORIGIN_GEOMETRY', center='MEDIAN')
 
         return{'FINISHED'}
     
@@ -89,24 +100,30 @@ class PanelRMAction(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
             
-        row = layout.row()
-        row.operator("myops.add_point", icon='VERTEXSEL', text="Add Point")
+        layout.row().operator("myops.add_point", icon='VERTEXSEL', text="Add Point")
       
-        
+        layout.row().operator("myops.set_orig_to_geo", icon='WORLD', text="Set origin to geometry")
+      
+        layout.row().operator("mesh.fill_grid", icon="GRID", text="Grid Fill")
+                
         
 def register():
     bpy.utils.register_class(PanelRM)
     bpy.utils.register_class(PanelRMModifier)
     bpy.utils.register_class(PanelRMAction)
+    
     bpy.utils.register_class(MyOpSubdSol)
     bpy.utils.register_class(MyOpAddPoint)
+    bpy.utils.register_class(MyOpSetOrigGeo)
     
 def unregister():
     bpy.utils.unregister_class(PanelRM)
     bpy.utils.unregister_class(PanelRMModifier)
     bpy.utils.unregister_class(PanelRMAction)
+    
     bpy.utils.unregister_class(MyOpSubdSol)
     bpy.utils.unregister_class(MyOpAddPoint)
+    bpy.utils.unregister_class(MyOpSetOrigGeo)
     
 
 if __name__ == "__main__":
