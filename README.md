@@ -1,5 +1,5 @@
 # blender_addon
-I propose some addons
+I propose some addons for Blender
 
 # 1. RM Addon
 
