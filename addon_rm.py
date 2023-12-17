@@ -48,6 +48,26 @@ class MyOpSetOrigGeo(bpy.types.Operator):
 
         return{'FINISHED'}
     
+class MyOpDuplicateSel(bpy.types.Operator):
+    bl_idname='myops.duplicate_sel'
+    bl_label = 'Duplicate Selection'
+    
+    
+    def execute(self, context):
+        bpy.ops.mesh.duplicate_move(MESH_OT_duplicate={"mode":1}, TRANSFORM_OT_translate={"value":(0, 0, 0), "orient_type":'GLOBAL', "orient_matrix":((1, 0, 0), (0, 1, 0), (0, 0, 1)), "orient_matrix_type":'GLOBAL', "constraint_axis":(False, False, False), "mirror":False, "use_proportional_edit":False, "proportional_edit_falloff":'SMOOTH', "proportional_size":1, "use_proportional_connected":False, "use_proportional_projected":False, "snap":False, "snap_elements":{'INCREMENT'}, "use_snap_project":False, "snap_target":'CLOSEST', "use_snap_self":True, "use_snap_edit":True, "use_snap_nonedit":True, "use_snap_selectable":False, "snap_point":(0, 0, 0), "snap_align":False, "snap_normal":(0, 0, 0), "gpencil_strokes":False, "cursor_transform":False, "texture_space":False, "remove_on_cancel":False, "use_duplicated_keyframes":False, "view2d_edge_pan":False, "release_confirm":False, "use_accurate":False, "alt_navigation":True, "use_automerge_and_split":False})
+        bpy.ops.mesh.separate(type='SELECTED')
+
+        return{'FINISHED'}
+    
+class MyOpDuplicateObject(bpy.types.Operator):
+    bl_idname='myops.duplicate_obj'
+    bl_label = 'Duplicate Object'
+    
+    
+    def execute(self, context):
+        bpy.ops.object.duplicate_move(OBJECT_OT_duplicate={"linked":False, "mode":'TRANSLATION'}, TRANSFORM_OT_translate={"value":(0, 0, 0), "orient_type":'GLOBAL', "orient_matrix":((1, 0, 0), (0, 1, 0), (0, 0, 1)), "orient_matrix_type":'GLOBAL', "constraint_axis":(False, False, False), "mirror":False, "use_proportional_edit":False, "proportional_edit_falloff":'SMOOTH', "proportional_size":1, "use_proportional_connected":False, "use_proportional_projected":False, "snap":False, "snap_elements":{'INCREMENT'}, "use_snap_project":False, "snap_target":'CLOSEST', "use_snap_self":True, "use_snap_edit":True, "use_snap_nonedit":True, "use_snap_selectable":False, "snap_point":(0, 0, 0), "snap_align":False, "snap_normal":(0, 0, 0), "gpencil_strokes":False, "cursor_transform":False, "texture_space":False, "remove_on_cancel":False, "use_duplicated_keyframes":False, "view2d_edge_pan":False, "release_confirm":False, "use_accurate":False, "alt_navigation":True, "use_automerge_and_split":False})
+        
+        return{'FINISHED'}
     
 class PanelRM(bpy.types.Panel):
     bl_label = "RM addon"
@@ -105,6 +125,11 @@ class PanelRMAction(bpy.types.Panel):
         layout.row().operator("myops.set_orig_to_geo", icon='WORLD', text="Set origin to geometry")
       
         layout.row().operator("mesh.fill_grid", icon="GRID", text="Grid Fill")
+        
+        if 'EDIT' in bpy.context.mode:
+            layout.row().operator("myops.duplicate_sel", icon="DUPLICATE", text="Duplicate Selection")
+        
+        layout.row().operator("myops.duplicate_obj", icon="DUPLICATE", text="Duplicate Object")
                 
         
 def register():
@@ -115,6 +140,8 @@ def register():
     bpy.utils.register_class(MyOpSubdSol)
     bpy.utils.register_class(MyOpAddPoint)
     bpy.utils.register_class(MyOpSetOrigGeo)
+    bpy.utils.register_class(MyOpDuplicateSel) 
+    bpy.utils.register_class(MyOpDuplicateObject) 
     
 def unregister():
     bpy.utils.unregister_class(PanelRM)
@@ -124,6 +151,8 @@ def unregister():
     bpy.utils.unregister_class(MyOpSubdSol)
     bpy.utils.unregister_class(MyOpAddPoint)
     bpy.utils.unregister_class(MyOpSetOrigGeo)
+    bpy.utils.unregister_class(MyOpDuplicateSel) 
+    bpy.utils.unregister_class(MyOpDuplicateObject) 
     
 
 if __name__ == "__main__":
